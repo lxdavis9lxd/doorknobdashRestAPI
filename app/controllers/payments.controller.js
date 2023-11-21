@@ -48,6 +48,7 @@ exports.create = (req, res) => {
 // Retrieve all Paymentss from the database.
 exports.findAll = (req, res) => {
      // Compare API key
+      const apiKey = req.headers['api-key'];
   const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);

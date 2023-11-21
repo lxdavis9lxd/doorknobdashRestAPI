@@ -2,6 +2,7 @@ const db = require("../models");
 const SPKusers = db.SPKusers;
 const Op = db.Sequelize.Op;
 const validatekey  = require("../controllers/validator.js");
+
 // Create and Save a new SPKusers
 exports.create = (req, res) => {
   const apiKey = req.headers['api-key'];
@@ -45,9 +46,10 @@ exports.create = (req, res) => {
 
 // Retrieve all SPKuserss from the database.
 exports.findAll = (req, res) => {
-    const title = req.query.title;
-    var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  const title = req.query.title;
+   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
    // Compare API key
+   const apiKey = req.headers['api-key'];
    const isvalidkey = validatekey.validateApiKey(apiKey)
    if (isvalidkey.status == 401) {  
      console.log("Unauthorized",apiKey);

@@ -1,5 +1,5 @@
 const db = require("../models");
-const Orderdetails = db.orderdetailss;
+const Orderdetails = db.orderdetails;
 const Op = db.Sequelize.Op;
 const validatekey  = require("../controllers/validator.js");
 
@@ -50,6 +50,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Orderdetailss from the database.
 exports.findAll = (req, res) => {
+  const apiKey = req.headers['api-key'];
   const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);

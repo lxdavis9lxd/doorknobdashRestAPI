@@ -1,5 +1,5 @@
 const db = require("../models");
-const Products = db.productss;
+const Products = db.products;
 const Op = db.Sequelize.Op;
 const validatekey  = require("../controllers/validator.js");
 // Create and Save a new Products
@@ -53,6 +53,7 @@ exports.create = (req, res) => {
 // Retrieve all Productss from the database.
 exports.findAll = (req, res) => {
    // Compare API key
+    const apiKey = req.headers['api-key'];
    const isvalidkey = validatekey.validateApiKey(apiKey)
    if (isvalidkey.status == 401) {  
      console.log("Unauthorized",apiKey);
