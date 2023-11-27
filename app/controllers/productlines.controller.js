@@ -1,6 +1,6 @@
 const db = require("../models");
-const validate = require("validator");
-const ProductLines = db.productlines;
+//const validate = require("validator");
+const Productlines = db.productlines;
 const Op = db.Sequelize.Op;
 const validatekey  = require("../controllers/validator.js");
 // Create and Save a new ProductLines
@@ -23,17 +23,17 @@ exports.create = (req, res) => {
   }
 
   // Create a ProductLines
-  const ProductLines = {
+  const productlines = req.body.Data.map(data => ({
     "Productline": data.Productline,
     "Textdescription": data.Textdescription,
     "Htmldescription": data.Htmldescription,
     "Image": data.Image,
     "CreatedBy": data.CreatedBy,
     "ModifiiedBy":data.ModifiiedBy
-  };
-
+  }));
+  
   // Save ProductLines in the database
-  ProductLines.bulkCreate(productLines)
+  Productlines.bulkCreate(productlines)
     .then(data => {
       res.send(data);
     })

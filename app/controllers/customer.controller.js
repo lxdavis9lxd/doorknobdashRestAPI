@@ -25,7 +25,8 @@ exports.create = (req, res) => {
   }
   // Create Customers
   const customers = req.body.Data.map(data => ({
-    Customernumber: data.Customernumber,
+    id: data.Customernumber,
+    CustomerNumber: data.Customernumber,
     CustomerName: data.CustomerName,
     ContactlastName: data.ContactlastName,
     ContactfirstName: data.ContactfirstName,

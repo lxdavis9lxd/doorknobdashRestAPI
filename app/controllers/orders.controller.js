@@ -23,8 +23,8 @@ exports.create = (req, res) => {
   }
 
   // Create a Orders
-  const Orders = req.body.Data.map(data => ({
-    "Ordernumber": data.Ordernumber,
+  const orders = req.body.Data.map(data => ({
+    "ordernumber": data.Ordernumber,
     "OrderDate": data.OrderDate,
     "RequiredDate": data.RequiredDate,
     "ShippedDate": data.ShippedDate,
@@ -36,7 +36,7 @@ exports.create = (req, res) => {
   }));
 
   // Save Orders in the database
-  Orders.bulkCreate(Orders)
+  Orders.bulkCreate(orders)
     .then(data => {
       res.send(data);
     })

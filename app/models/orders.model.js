@@ -1,7 +1,7 @@
 
     module.exports = (sequelize, Sequelize) => {
     const Orders = sequelize.define("orders", {
-      Ordernumber: {
+      ordernumber: {
         type: Sequelize.INTEGER
       },
       OrderDate: {

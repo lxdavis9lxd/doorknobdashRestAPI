@@ -1,8 +1,10 @@
 module.exports = (sequelize, Sequelize) => {
   const Productlines = sequelize.define('productlines', {
     Productline: {
-      type: Sequelize.STRING
-    },
+      type: Sequelize.STRING,
+      allowNull: false
+      
+    },    
     Textdescription: {
       type: Sequelize.STRING,
       allowNull: true
@@ -23,11 +25,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: true
     }
-  }, {
-    // Add the following code to set the schema options
-    schema: 'public',
-    timestamps: false
   });
-
+    
   return Productlines;
 };

@@ -22,7 +22,7 @@ exports.create = (req, res) => {
   }
 
   // Create a Payments
-  const Payments = req.body.Data.map(data => ({
+  const payments = req.body.Data.map(data => ({
     "Customernumber":data.Customernumber,
     "Transactionnumber": data.Transactionnumber,
     "PaymentDate": data.PaymentDate,
@@ -32,7 +32,7 @@ exports.create = (req, res) => {
   }));
 
   // Save Payments in the database
-  Payments.bulkCreate(Payments)
+  Payments.bulkCreate(payments)
     .then(data => {
       res.send(data);
     })

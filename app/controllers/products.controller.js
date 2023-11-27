@@ -22,7 +22,8 @@ exports.create = (req, res) => {
   }
 
   // Create a Products
-  const Products = req.body.Data.map(data => ({
+  const products = req.body.Data.map(data => ({
+    "id":data.ProductCode,
     "ProductCode":data.ProductCode,
       "ProductName": data.ProductName,
       "Productline": data.Productline,
@@ -37,7 +38,7 @@ exports.create = (req, res) => {
   }));
 
   // Save Products in the database
-  Products.bulkCreate(Products)
+  Products.bulkCreate(products)
     .then(data => {
       res.send(data);
     })

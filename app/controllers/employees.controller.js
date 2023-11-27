@@ -25,6 +25,7 @@ if (isvalidkey.status == 401) {
   // Create a Employees
   const employees = req.body.Data.map(data => ({
     "id": data.Employeenumber,
+    "EmployeeNumber": data.Employeenumber,
     "LastName": data.LastName,
     "FirstName": data.FirstName,
     "Extension": data.Extension,

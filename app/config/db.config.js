@@ -6,7 +6,7 @@ module.exports = {
   HOST: "mi3-ss121.a2hosting.com",
   USER: "bdpamked",
   PASSWORD: "U;qibKs[2KC607",
-  DB: "bdpamked_student_DB",
+  DB: "bdpamked_student_DBv1",
   dialect: "mysql",
   pool: {
     max: 5,

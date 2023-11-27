@@ -1,5 +1,5 @@
 const db = require("../models");
-const SPKusers = db.SPKusers;
+const SPKusers = db.spkusers;
 const Op = db.Sequelize.Op;
 const validatekey  = require("../controllers/validator.js");
 
@@ -23,7 +23,7 @@ exports.create = (req, res) => {
   }
 
   // Create a SPKusers
-  const SPKusers = req.body.Data.map(data => ({
+  const spkusers = req.body.Data.map(data => ({
     "UserName": data.UserName,
       "Pword": data.Pword,
       "Userrole": data.Userrole,
@@ -31,7 +31,7 @@ exports.create = (req, res) => {
   }));
 
   // Save SPKusers in the database
-  SPKusers.create(SPKusers)
+  SPKusers.bulkCreate(spkusers)
     .then(data => {
       res.send(data);
     })
@@ -74,6 +74,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
  // Compare API key
+ const apiKey = req.headers['api-key'];
  const isvalidkey = validatekey.validateApiKey(apiKey)
  if (isvalidkey.status == 401) {  
    console.log("Unauthorized",apiKey);
@@ -103,6 +104,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
  // Compare API key
+ const apiKey = req.headers['api-key'];
  const isvalidkey = validatekey.validateApiKey(apiKey)
  if (isvalidkey.status == 401) {  
    console.log("Unauthorized",apiKey);
@@ -136,6 +138,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
  // Compare API key
+ const apiKey = req.headers['api-key'];
  const isvalidkey = validatekey.validateApiKey(apiKey)
  if (isvalidkey.status == 401) {  
    console.log("Unauthorized",apiKey);
@@ -168,6 +171,7 @@ exports.delete = (req, res) => {
 // Delete all SPKuserss from the database.
 exports.deleteAll = (req, res) => {
    // Compare API key
+   const apiKey = req.headers['api-key'];
    const isvalidkey = validatekey.validateApiKey(apiKey)
    if (isvalidkey.status == 401) {  
      console.log("Unauthorized",apiKey);
@@ -194,6 +198,7 @@ exports.deleteAll = (req, res) => {
 // Find all published SPKuserss
 exports.findAllPublished = (req, res) => {
    // Compare API key
+   const apiKey = req.headers['api-key'];
    const isvalidkey = validatekey.validateApiKey(apiKey)
    if (isvalidkey.status == 401) {  
      console.log("Unauthorized",apiKey);
