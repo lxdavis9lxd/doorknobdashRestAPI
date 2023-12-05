@@ -24,5 +24,5 @@ module.exports = app => {
     // Delete all Tutorials
     router.delete("/", tutorials.deleteAll);
   
-    app.use('/api/v1/tutorials', router);
+    app.use('/s/api/v1/tutorials', router);
   };

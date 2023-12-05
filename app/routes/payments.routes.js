@@ -24,5 +24,5 @@ module.exports = app => {
     // Delete all payments
     router.delete("/", payments.deleteAll);
   
-    app.use('/api/v1/payments', router);
+    app.use('/s/api/v1/payments', router);
   };

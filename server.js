@@ -29,7 +29,7 @@ db.sequelize.sync()
 app.use(express.urlencoded({ extended: true }));
 
 // simple route
-app.get("/", (req, res) => {
+app.get("/store", (req, res) => {
   res.json({ message: "Welcome to MySQL Sequelize application.   " + corsOptions.origin});
 });
 

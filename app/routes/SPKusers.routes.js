@@ -24,5 +24,5 @@ module.exports = app => {
     // Delete all SPKusers
     router.delete("/", SPKusers.deleteAll);
   
-    app.use('/api/v1/SPKusers', router);
+    app.use('/s/api/v1/SPKusers', router);
   };

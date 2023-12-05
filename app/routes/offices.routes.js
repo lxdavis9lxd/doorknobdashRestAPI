@@ -24,5 +24,5 @@ module.exports = app => {
     // Delete all offices
     router.delete("/", offices.deleteAll);
   
-    app.use('/api/v1/offices', router);
+    app.use('/s/api/v1/offices', router);
   };
