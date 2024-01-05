@@ -1,9 +1,9 @@
 const db = require("../models");
-const Offices = db.offices;
+const Menuitem = db.menuitem;
 const Op = db.Sequelize.Op;
-const validatekey  = require("../controllers/validator.js");
+const validatekey  = require("./validator.js");
 
-// Create and Save a new Offices
+// Create and Save a new Customer
 exports.create = (req, res) => {
   const apiKey = req.headers['api-key'];
   const isvalidkey = validatekey.validateApiKey(apiKey)
@@ -15,48 +15,42 @@ exports.create = (req, res) => {
       return;
     }
   // Validate request
-  if (!req.body.Data) {
+ console.log("log",req.body)
+  if (!req.body.Data[0].Customernumber) {
     res.status(400).send({
       message: "Content can not be empty!"
+      
     });
     return;
   }
-
-  // Create a Offices
-  const offices =  req.body.Data.map(data => ({
-      "OfficeCode": data.OfficeCode,
-      "City": data.City,
-      "Phone": data.Phone,
-      "Addressline1": data.Addressline1,
-      "Addressline2": data.Addressline2,
-      "State": data.State,
-      "Country":data.Country,
-      "PostalCode": data.PostalCode,
-      "Territory": data.Territory,
-      "CreatedBy": data.CreatedBy,
-      "ModifiedBy": data.ModifiedBy
+  // Create Menuitem
+  const menuitem = req.body.Data.map(data => ({
+    ID: data.ID,
+    RestaurantId: data.RestaurantId,
+    ItemName: data.ItemName,
+    Price: data.Price
   }));
 
-  // Save Offices in the database
-  Offices.bulkCreate(offices)
+  // Save menuitem in the database
+  Menuitem.bulkCreate(menuitem)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Offices."
+        message: err.message || "Some error occurred while creating the Menuitem."
       });
     });
-
+ 
 };
 
-// Retrieve all Officess from the database.
+// Retrieve all Menuitem from the database.
 exports.findAll = (req, res) => {
-  // Read API key from header
+       // Read API key from header
   const apiKey = req.headers['api-key'];
-
+  // Compare API key
   const isvalidkey = validatekey.validateApiKey(apiKey)
+
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -66,22 +60,24 @@ exports.findAll = (req, res) => {
     }
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-  
-    Offices.findAll({ where: condition })
+    console.log("condition: " + condition);
+    Menuitem.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving Officess."
+            err.message || "Some error occurred while retrieving Menuitem."
         });
       });
 };
 
-// Find a single Offices with an id
+
+// Find a single Menuitem with an id
 exports.findOne = (req, res) => {
-  // Read API key from header
+    const id = req.params.id;
+       // Read API key from header
   const apiKey = req.headers['api-key'];
 
   const isvalidkey = validatekey.validateApiKey(apiKey)
@@ -92,31 +88,29 @@ exports.findOne = (req, res) => {
       });
       return;
     }
-    const id = req.params.id;
-
-    Offices.findByPk(id)
+    Menuitem.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Offices with id=${id}.`
+            message: `Cannot find Menuitem with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Offices with id=" + id
+          message: "Error retrieving Menuitem with id=" + id
         });
       });
 };
 
-// Update a Offices by the id in the request
+// Update a Menuitem by the id in the request
 exports.update = (req, res) => {
-  // Read API key from header
-  const apiKey = req.headers['api-key'];
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
 
-  const isvalidkey = validatekey.validateApiKey(apiKey)
+      const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -126,69 +120,69 @@ exports.update = (req, res) => {
     }
     const id = req.params.id;
 
-    Offices.update(req.body, {
+    Menuitem.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Offices was updated successfully."
+            message: "Menuitem was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Offices with id=${id}. Maybe Offices was not found or req.body is empty!`
+            message: `Cannot update Menuitem with id=${id}. Maybe Menuitem was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Offices with id=" + id
+          message: "Error updating Menuitem with id=" + id
         });
       });
 };
 
-// Delete a Offices with the specified id in the request
+// Delete a Menuitem with the specified id in the request
 exports.delete = (req, res) => {
-  // Read API key from header
-  const apiKey = req.headers['api-key'];
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
 
-  const isvalidkey = validatekey.validateApiKey(apiKey)
-  if (isvalidkey.status == 401) {  
-    console.log("Unauthorized",apiKey);
-      res.status(401).send({
-        message: "Unauthorized"
-      });
-      return;
-    }
+      const isvalidkey = validatekey.validateApiKey(apiKey)
+      if (isvalidkey.status == 401) {  
+        console.log("Unauthorized",apiKey);
+          res.status(401).send({
+            message: "Unauthorized"
+          });
+          return;
+        }
     const id = req.params.id;
 
-    Offices.destroy({
+    Menuitem.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Offices was deleted successfully!"
+            message: "Menuitem was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Offices with id=${id}. Maybe Offices was not found!`
+            message: `Cannot delete Menuitem with id=${id}. Maybe Menuitem was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Offices with id=" + id
+          message: "Could not delete Menuitem with id=" + id
         });
       });
 };
 
-// Delete all Officess from the database.
+// Delete all Menuitem from the database.
 exports.deleteAll = (req, res) => {
-  // Read API key from header
-  const apiKey = req.headers['api-key'];
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
 
-  const isvalidkey = validatekey.validateApiKey(apiKey)
+      const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -196,27 +190,27 @@ exports.deleteAll = (req, res) => {
       });
       return;
     }
-    Offices.destroy({
+    Menuitem.destroy({
         where: {},
         truncate: false
       })
         .then(nums => {
-          res.send({ message: `${nums} Officess were deleted successfully!` });
+          res.send({ message: `${nums} Menuitem were deleted successfully!` });
         })
         .catch(err => {
           res.status(500).send({
             message:
-              err.message || "Some error occurred while removing all Officess."
+              err.message || "Some error occurred while removing all Menuitem."
           });
         });
 };
 
-// Find all published Officess
+// Find all published Menuitem
 exports.findAllPublished = (req, res) => {
-  // Read API key from header
-  const apiKey = req.headers['api-key'];
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
 
-  const isvalidkey = validatekey.validateApiKey(apiKey)
+      const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -224,14 +218,14 @@ exports.findAllPublished = (req, res) => {
       });
       return;
     }
-    Offices.findAll({ where: { published: true } })
+    Menuitem.findAll({ where: { published: true } })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Officess."
+          err.message || "Some error occurred while retrieving Menuitem."
       });
     });
 };

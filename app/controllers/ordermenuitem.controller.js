@@ -1,10 +1,9 @@
 const db = require("../models");
-const Orderdetails = db.orderdetails;
+const Ordermenuitem = db.ordermenuitem;
 const Op = db.Sequelize.Op;
-const validatekey  = require("../controllers/validator.js");
+const validatekey  = require("./validator.js");
 
-
-// Create and Save a new Orderdetails
+// Create and Save a new Customer
 exports.create = (req, res) => {
   const apiKey = req.headers['api-key'];
   const isvalidkey = validatekey.validateApiKey(apiKey)
@@ -16,42 +15,42 @@ exports.create = (req, res) => {
       return;
     }
   // Validate request
-  if (!req.body) {
+ console.log("log",req.body)
+  if (!req.body.Data[0].Customernumber) {
     res.status(400).send({
       message: "Content can not be empty!"
+      
     });
     return;
   }
-
-  // Create a Orderdetails
-  const orderdetails = req.body.Data.map(data => ({
-    "Ordernumber": data.Ordernumber,
-      "ProductCode": data.ProductCode,
-      "Quantityordered": data.Quantityordered,
-      "Priceeach": data.Priceeach,
-      "Orderlinenumber": data.Orderlinenumber,
-      "CreatedBy": data.CreatedBy,
-      "ModifiedBy": data.ModifiedBy
+  // Create Ordermenuitem
+  const ordermenuitem = req.body.Data.map(data => ({
+    ID: data.ID,
+    OrderId: data.OrderId,
+    MenuItemId: data.MenuItemId,
+    QtyOrdered: data.QtyOrdered
   }));
 
-  // Save Orderdetails in the database
-  Orderdetails.bulkCreate(orderdetails)
+  // Save ordermenuitem in the database
+  Ordermenuitem.bulkCreate(ordermenuitem)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Orderdetails."
+        message: err.message || "Some error occurred while creating the Ordermenuitem."
       });
     });
-
+ 
 };
 
-// Retrieve all Orderdetailss from the database.
+// Retrieve all Ordermenuitem from the database.
 exports.findAll = (req, res) => {
+       // Read API key from header
   const apiKey = req.headers['api-key'];
+  // Compare API key
   const isvalidkey = validatekey.validateApiKey(apiKey)
+
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -59,26 +58,29 @@ exports.findAll = (req, res) => {
       });
       return;
     }
-
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-  
-    Orderdetails.findAll({ where: condition })
+    console.log("condition: " + condition);
+    Ordermenuitem.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving Orderdetailss."
+            err.message || "Some error occurred while retrieving Ordermenuitem."
         });
       });
 };
 
-// Find a single Orderdetails with an id
+
+// Find a single Ordermenuitem with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
-    const isvalidkey = validatekey.validateApiKey(apiKey)
+       // Read API key from header
+  const apiKey = req.headers['api-key'];
+
+  const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -86,27 +88,29 @@ exports.findOne = (req, res) => {
       });
       return;
     }
-    Orderdetails.findByPk(id)
+    Ordermenuitem.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Orderdetails with id=${id}.`
+            message: `Cannot find Ordermenuitem with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Orderdetails with id=" + id
+          message: "Error retrieving Ordermenuitem with id=" + id
         });
       });
 };
 
-// Update a Orderdetails by the id in the request
+// Update a Ordermenuitem by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.id;
-    const isvalidkey = validatekey.validateApiKey(apiKey)
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
+
+      const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -114,62 +118,71 @@ exports.update = (req, res) => {
       });
       return;
     }
-    Orderdetails.update(req.body, {
+    const id = req.params.id;
+
+    Ordermenuitem.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Orderdetails was updated successfully."
+            message: "Ordermenuitem was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Orderdetails with id=${id}. Maybe Orderdetails was not found or req.body is empty!`
+            message: `Cannot update Ordermenuitem with id=${id}. Maybe Ordermenuitem was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Orderdetails with id=" + id
+          message: "Error updating Ordermenuitem with id=" + id
         });
       });
 };
 
-// Delete a Orderdetails with the specified id in the request
+// Delete a Ordermenuitem with the specified id in the request
 exports.delete = (req, res) => {
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
+
+      const isvalidkey = validatekey.validateApiKey(apiKey)
+      if (isvalidkey.status == 401) {  
+        console.log("Unauthorized",apiKey);
+          res.status(401).send({
+            message: "Unauthorized"
+          });
+          return;
+        }
     const id = req.params.id;
-    const isvalidkey = validatekey.validateApiKey(apiKey)
-  if (isvalidkey.status == 401) {  
-    console.log("Unauthorized",apiKey);
-      res.status(401).send({
-        message: "Unauthorized"
-      });
-      return;
-    } 
-    Orderdetails.destroy({
+
+    Ordermenuitem.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Orderdetails was deleted successfully!"
+            message: "Ordermenuitem was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Orderdetails with id=${id}. Maybe Orderdetails was not found!`
+            message: `Cannot delete Ordermenuitem with id=${id}. Maybe Ordermenuitem was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Orderdetails with id=" + id
+          message: "Could not delete Ordermenuitem with id=" + id
         });
       });
 };
 
-// Delete all Orderdetailss from the database.
+// Delete all Ordermenuitem from the database.
 exports.deleteAll = (req, res) => {
-  const isvalidkey = validatekey.validateApiKey(apiKey)
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
+
+      const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -177,24 +190,27 @@ exports.deleteAll = (req, res) => {
       });
       return;
     }
-    Orderdetails.destroy({
+    Ordermenuitem.destroy({
         where: {},
         truncate: false
       })
         .then(nums => {
-          res.send({ message: `${nums} Orderdetailss were deleted successfully!` });
+          res.send({ message: `${nums} Ordermenuitem were deleted successfully!` });
         })
         .catch(err => {
           res.status(500).send({
             message:
-              err.message || "Some error occurred while removing all Orderdetailss."
+              err.message || "Some error occurred while removing all Ordermenuitem."
           });
         });
 };
 
-// Find all published Orderdetailss
+// Find all published Ordermenuitem
 exports.findAllPublished = (req, res) => {
-  const isvalidkey = validatekey.validateApiKey(apiKey)
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
+
+      const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -202,14 +218,14 @@ exports.findAllPublished = (req, res) => {
       });
       return;
     }
-   Orderdetails.findAll({ where: { published: true } })
+    Ordermenuitem.findAll({ where: { published: true } })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Orderdetailss."
+          err.message || "Some error occurred while retrieving Ordermenuitem."
       });
     });
 };

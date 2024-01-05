@@ -1,5 +1,5 @@
 const db = require("../models");
-const Customer = db.customer;
+const Restaurant = db.restaurant;
 const Op = db.Sequelize.Op;
 const validatekey  = require("./validator.js");
 
@@ -23,27 +23,27 @@ exports.create = (req, res) => {
     });
     return;
   }
-  // Create Customer
-  const customer = req.body.Data.map(data => ({
+  // Create Restaurant
+  const restaurant = req.body.Data.map(data => ({
     ID: data.ID,
-    FirstName: data.FirstName,
-    LastName: data.LastName
+    RestaurantName: data.RestaurantName,
+    AddressId: data.AddressId
   }));
 
-  // Save customer in the database
-  Customer.bulkCreate(customer)
+  // Save restaurant in the database
+  Restaurant.bulkCreate(restaurant)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the Customer."
+        message: err.message || "Some error occurred while creating the Restaurant."
       });
     });
  
 };
 
-// Retrieve all Customer from the database.
+// Retrieve all Restaurant from the database.
 exports.findAll = (req, res) => {
        // Read API key from header
   const apiKey = req.headers['api-key'];
@@ -60,20 +60,20 @@ exports.findAll = (req, res) => {
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
     console.log("condition: " + condition);
-    Customer.findAll({ where: condition })
+    Restaurant.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving Customer."
+            err.message || "Some error occurred while retrieving Restaurant."
         });
       });
 };
 
 
-// Find a single Customer with an id
+// Find a single Restaurant with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
        // Read API key from header
@@ -87,24 +87,24 @@ exports.findOne = (req, res) => {
       });
       return;
     }
-    Customer.findByPk(id)
+    Restaurant.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Customer with id=${id}.`
+            message: `Cannot find Restaurant with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Customer with id=" + id
+          message: "Error retrieving Restaurant with id=" + id
         });
       });
 };
 
-// Update a Customer by the id in the request
+// Update a Restaurant by the id in the request
 exports.update = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -119,28 +119,28 @@ exports.update = (req, res) => {
     }
     const id = req.params.id;
 
-    Customer.update(req.body, {
+    Restaurant.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Customer was updated successfully."
+            message: "Restaurant was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Customer with id=${id}. Maybe Customer was not found or req.body is empty!`
+            message: `Cannot update Restaurant with id=${id}. Maybe Restaurant was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Customer with id=" + id
+          message: "Error updating Restaurant with id=" + id
         });
       });
 };
 
-// Delete a Customer with the specified id in the request
+// Delete a Restaurant with the specified id in the request
 exports.delete = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -155,28 +155,28 @@ exports.delete = (req, res) => {
         }
     const id = req.params.id;
 
-    Customer.destroy({
+    Restaurant.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Customer was deleted successfully!"
+            message: "Restaurant was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Customer with id=${id}. Maybe Customer was not found!`
+            message: `Cannot delete Restaurant with id=${id}. Maybe Restaurant was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Customer with id=" + id
+          message: "Could not delete Restaurant with id=" + id
         });
       });
 };
 
-// Delete all Customer from the database.
+// Delete all Restaurant from the database.
 exports.deleteAll = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -189,22 +189,22 @@ exports.deleteAll = (req, res) => {
       });
       return;
     }
-    Customer.destroy({
+    Restaurant.destroy({
         where: {},
         truncate: false
       })
         .then(nums => {
-          res.send({ message: `${nums} Customer were deleted successfully!` });
+          res.send({ message: `${nums} Restaurant were deleted successfully!` });
         })
         .catch(err => {
           res.status(500).send({
             message:
-              err.message || "Some error occurred while removing all Customer."
+              err.message || "Some error occurred while removing all Restaurant."
           });
         });
 };
 
-// Find all published Customer
+// Find all published Restaurant
 exports.findAllPublished = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -217,14 +217,14 @@ exports.findAllPublished = (req, res) => {
       });
       return;
     }
-    Customer.findAll({ where: { published: true } })
+    Restaurant.findAll({ where: { published: true } })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Customer."
+          err.message || "Some error occurred while retrieving Restaurant."
       });
     });
 };

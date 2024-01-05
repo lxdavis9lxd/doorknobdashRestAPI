@@ -1,8 +1,9 @@
 const db = require("../models");
-const Payments = db.payments;
+const Country = db.country;
 const Op = db.Sequelize.Op;
-const validatekey  = require("../controllers/validator.js");
-// Create and Save a new Payments
+const validatekey  = require("./validator.js");
+
+// Create and Save a new country
 exports.create = (req, res) => {
   const apiKey = req.headers['api-key'];
   const isvalidkey = validatekey.validateApiKey(apiKey)
@@ -14,42 +15,40 @@ exports.create = (req, res) => {
       return;
     }
   // Validate request
-  if (!req.body) {
+ console.log("log",req.body)
+  if (!req.body.Data[0].id) {
     res.status(400).send({
       message: "Content can not be empty!"
+      
     });
     return;
   }
-
-  // Create a Payments
-  const payments = req.body.Data.map(data => ({
-    "Customernumber":data.Customernumber,
-    "Transactionnumber": data.Transactionnumber,
-    "PaymentDate": data.PaymentDate,
-    "Amount": data.Amount,
-    "CreatedBy": data.CreatedBy,
-    "ModifiedBy": data.ModifiedBy
+  // Create Country
+  const country = req.body.Data.map(data => ({
+    ID: data.ID,
+    CountryName: data.CountryName
   }));
 
-  // Save Payments in the database
-  Payments.bulkCreate(payments)
+  // Save country in the database
+  Country.bulkCreate(country)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Payments."
+        message: err.message || "Some error occurred while creating the Country."
       });
     });
-
+ 
 };
 
-// Retrieve all Paymentss from the database.
+// Retrieve all Country from the database.
 exports.findAll = (req, res) => {
-     // Compare API key
-      const apiKey = req.headers['api-key'];
+       // Read API key from header
+  const apiKey = req.headers['api-key'];
+  // Compare API key
   const isvalidkey = validatekey.validateApiKey(apiKey)
+
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -59,23 +58,26 @@ exports.findAll = (req, res) => {
     }
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-  
-    Payments.findAll({ where: condition })
+    console.log("condition: " + condition);
+    Country.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving Paymentss."
+            err.message || "Some error occurred while retrieving Country."
         });
       });
 };
 
-// Find a single Payments with an id
+
+// Find a single Country with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
-     // Compare API key
+       // Read API key from header
+  const apiKey = req.headers['api-key'];
+
   const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
@@ -84,28 +86,29 @@ exports.findOne = (req, res) => {
       });
       return;
     }
-    Payments.findByPk(id)
+    Country.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Payments with id=${id}.`
+            message: `Cannot find Country with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Payments with id=" + id
+          message: "Error retrieving Country with id=" + id
         });
       });
 };
 
-// Update a Payments by the id in the request
+// Update a Country by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.id;
-     // Compare API key
-  const isvalidkey = validatekey.validateApiKey(apiKey)
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
+
+      const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -113,64 +116,71 @@ exports.update = (req, res) => {
       });
       return;
     }
-    Payments.update(req.body, {
+    const id = req.params.id;
+
+    Country.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Payments was updated successfully."
+            message: "Country was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Payments with id=${id}. Maybe Payments was not found or req.body is empty!`
+            message: `Cannot update Country with id=${id}. Maybe Country was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Payments with id=" + id
+          message: "Error updating Country with id=" + id
         });
       });
 };
 
-// Delete a Payments with the specified id in the request
+// Delete a Country with the specified id in the request
 exports.delete = (req, res) => {
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
+
+      const isvalidkey = validatekey.validateApiKey(apiKey)
+      if (isvalidkey.status == 401) {  
+        console.log("Unauthorized",apiKey);
+          res.status(401).send({
+            message: "Unauthorized"
+          });
+          return;
+        }
     const id = req.params.id;
-     // Compare API key
-  const isvalidkey = validatekey.validateApiKey(apiKey)
-  if (isvalidkey.status == 401) {  
-    console.log("Unauthorized",apiKey);
-      res.status(401).send({
-        message: "Unauthorized"
-      });
-      return;
-    }
-    Payments.destroy({
+
+    Country.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Payments was deleted successfully!"
+            message: "Country was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Payments with id=${id}. Maybe Payments was not found!`
+            message: `Cannot delete Country with id=${id}. Maybe Country was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Payments with id=" + id
+          message: "Could not delete Country with id=" + id
         });
       });
 };
 
-// Delete all Paymentss from the database.
+// Delete all Country from the database.
 exports.deleteAll = (req, res) => {
-     // Compare API key
-  const isvalidkey = validatekey.validateApiKey(apiKey)
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
+
+      const isvalidkey = validatekey.validateApiKey(apiKey)
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({
@@ -178,40 +188,42 @@ exports.deleteAll = (req, res) => {
       });
       return;
     }
-    Payments.destroy({
+    Country.destroy({
         where: {},
         truncate: false
       })
         .then(nums => {
-          res.send({ message: `${nums} Paymentss were deleted successfully!` });
+          res.send({ message: `${nums} Country were deleted successfully!` });
         })
         .catch(err => {
           res.status(500).send({
             message:
-              err.message || "Some error occurred while removing all Paymentss."
+              err.message || "Some error occurred while removing all Country."
           });
         });
 };
 
-// Find all published Paymentss
+// Find all published Country
 exports.findAllPublished = (req, res) => {
-   // Compare API key
-   const isvalidkey = validatekey.validateApiKey(apiKey)
-   if (isvalidkey.status == 401) {  
-     console.log("Unauthorized",apiKey);
-       res.status(401).send({
-         message: "Unauthorized"
-       });
-       return;
-     }
-    Payments.findAll({ where: { published: true } })
+      // Read API key from header
+      const apiKey = req.headers['api-key'];
+
+      const isvalidkey = validatekey.validateApiKey(apiKey)
+  if (isvalidkey.status == 401) {  
+    console.log("Unauthorized",apiKey);
+      res.status(401).send({
+        message: "Unauthorized"
+      });
+      return;
+    }
+    Country.findAll({ where: { published: true } })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Paymentss."
+          err.message || "Some error occurred while retrieving Country."
       });
     });
 };

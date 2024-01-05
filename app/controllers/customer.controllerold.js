@@ -1,5 +1,5 @@
 const db = require("../models");
-const Customer = db.customer;
+const Customers = db.customers;
 const Op = db.Sequelize.Op;
 const validatekey  = require("./validator.js");
 
@@ -23,27 +23,42 @@ exports.create = (req, res) => {
     });
     return;
   }
-  // Create Customer
-  const customer = req.body.Data.map(data => ({
-    ID: data.ID,
-    FirstName: data.FirstName,
-    LastName: data.LastName
+  // Create Customers
+  const customers = req.body.Data.map(data => ({
+    id: data.Customernumber,
+    CustomerNumber: data.Customernumber,
+    CustomerName: data.CustomerName,
+    ContactlastName: data.ContactlastName,
+    ContactfirstName: data.ContactfirstName,
+    Phone: data.Phone,
+    Addressline1: data.Addressline1,
+    Addressline2: data.Addressline2,
+    City: data.City,
+    State: data.State,
+    PostalCode: data.PostalCode,
+    Country: data.Country,
+    Salesrepemployeenumber: data.Salesrepemployeenumber,
+    Creditlimit: data.Creditlimit,
+    Email: data.Email,
+    Fax: data.Fax,
+    CreatedBy: data.CreatedBy,
+    ModifiedBy: data.ModifiedBy
   }));
 
-  // Save customer in the database
-  Customer.bulkCreate(customer)
+  // Save customers in the database
+  Customers.bulkCreate(customers)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the Customer."
+        message: err.message || "Some error occurred while creating the Customers."
       });
     });
  
 };
 
-// Retrieve all Customer from the database.
+// Retrieve all Customers from the database.
 exports.findAll = (req, res) => {
        // Read API key from header
   const apiKey = req.headers['api-key'];
@@ -60,20 +75,20 @@ exports.findAll = (req, res) => {
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
     console.log("condition: " + condition);
-    Customer.findAll({ where: condition })
+    Customers.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving Customer."
+            err.message || "Some error occurred while retrieving Customers."
         });
       });
 };
 
 
-// Find a single Customer with an id
+// Find a single Customers with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
        // Read API key from header
@@ -87,24 +102,24 @@ exports.findOne = (req, res) => {
       });
       return;
     }
-    Customer.findByPk(id)
+    Customers.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Customer with id=${id}.`
+            message: `Cannot find Customers with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Customer with id=" + id
+          message: "Error retrieving Customers with id=" + id
         });
       });
 };
 
-// Update a Customer by the id in the request
+// Update a Customers by the id in the request
 exports.update = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -119,28 +134,28 @@ exports.update = (req, res) => {
     }
     const id = req.params.id;
 
-    Customer.update(req.body, {
+    Customers.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Customer was updated successfully."
+            message: "Customers was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Customer with id=${id}. Maybe Customer was not found or req.body is empty!`
+            message: `Cannot update Customers with id=${id}. Maybe Customers was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Customer with id=" + id
+          message: "Error updating Customers with id=" + id
         });
       });
 };
 
-// Delete a Customer with the specified id in the request
+// Delete a Customers with the specified id in the request
 exports.delete = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -155,28 +170,28 @@ exports.delete = (req, res) => {
         }
     const id = req.params.id;
 
-    Customer.destroy({
+    Customers.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Customer was deleted successfully!"
+            message: "Customers was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Customer with id=${id}. Maybe Customer was not found!`
+            message: `Cannot delete Customers with id=${id}. Maybe Customers was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Customer with id=" + id
+          message: "Could not delete Customers with id=" + id
         });
       });
 };
 
-// Delete all Customer from the database.
+// Delete all Customers from the database.
 exports.deleteAll = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -189,22 +204,22 @@ exports.deleteAll = (req, res) => {
       });
       return;
     }
-    Customer.destroy({
+    Customers.destroy({
         where: {},
         truncate: false
       })
         .then(nums => {
-          res.send({ message: `${nums} Customer were deleted successfully!` });
+          res.send({ message: `${nums} Customers were deleted successfully!` });
         })
         .catch(err => {
           res.status(500).send({
             message:
-              err.message || "Some error occurred while removing all Customer."
+              err.message || "Some error occurred while removing all Customers."
           });
         });
 };
 
-// Find all published Customer
+// Find all published Customers
 exports.findAllPublished = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -217,14 +232,14 @@ exports.findAllPublished = (req, res) => {
       });
       return;
     }
-    Customer.findAll({ where: { published: true } })
+    Customers.findAll({ where: { published: true } })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Customer."
+          err.message || "Some error occurred while retrieving Customers."
       });
     });
 };

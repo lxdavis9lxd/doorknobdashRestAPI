@@ -1,5 +1,5 @@
 const db = require("../models");
-const Customer = db.customer;
+const Deliverdriver = db.deliverdriver;
 const Op = db.Sequelize.Op;
 const validatekey  = require("./validator.js");
 
@@ -23,27 +23,27 @@ exports.create = (req, res) => {
     });
     return;
   }
-  // Create Customer
-  const customer = req.body.Data.map(data => ({
+  // Create Deliverdriver
+  const deliverdriver = req.body.Data.map(data => ({
     ID: data.ID,
     FirstName: data.FirstName,
     LastName: data.LastName
   }));
 
-  // Save customer in the database
-  Customer.bulkCreate(customer)
+  // Save deliverdriver in the database
+  Deliverdriver.bulkCreate(deliverdriver)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the Customer."
+        message: err.message || "Some error occurred while creating the Deliverdriver."
       });
     });
  
 };
 
-// Retrieve all Customer from the database.
+// Retrieve all Deliverdriver from the database.
 exports.findAll = (req, res) => {
        // Read API key from header
   const apiKey = req.headers['api-key'];
@@ -60,20 +60,20 @@ exports.findAll = (req, res) => {
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
     console.log("condition: " + condition);
-    Customer.findAll({ where: condition })
+    Deliverdriver.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving Customer."
+            err.message || "Some error occurred while retrieving Deliverdriver."
         });
       });
 };
 
 
-// Find a single Customer with an id
+// Find a single Deliverdriver with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
        // Read API key from header
@@ -87,24 +87,24 @@ exports.findOne = (req, res) => {
       });
       return;
     }
-    Customer.findByPk(id)
+    Deliverdriver.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Customer with id=${id}.`
+            message: `Cannot find Deliverdriver with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Customer with id=" + id
+          message: "Error retrieving Deliverdriver with id=" + id
         });
       });
 };
 
-// Update a Customer by the id in the request
+// Update a Deliverdriver by the id in the request
 exports.update = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -119,28 +119,28 @@ exports.update = (req, res) => {
     }
     const id = req.params.id;
 
-    Customer.update(req.body, {
+    Deliverdriver.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Customer was updated successfully."
+            message: "Deliverdriver was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Customer with id=${id}. Maybe Customer was not found or req.body is empty!`
+            message: `Cannot update Deliverdriver with id=${id}. Maybe Deliverdriver was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Customer with id=" + id
+          message: "Error updating Deliverdriver with id=" + id
         });
       });
 };
 
-// Delete a Customer with the specified id in the request
+// Delete a Deliverdriver with the specified id in the request
 exports.delete = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -155,28 +155,28 @@ exports.delete = (req, res) => {
         }
     const id = req.params.id;
 
-    Customer.destroy({
+    Deliverdriver.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Customer was deleted successfully!"
+            message: "Deliverdriver was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Customer with id=${id}. Maybe Customer was not found!`
+            message: `Cannot delete Deliverdriver with id=${id}. Maybe Deliverdriver was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Customer with id=" + id
+          message: "Could not delete Deliverdriver with id=" + id
         });
       });
 };
 
-// Delete all Customer from the database.
+// Delete all Deliverdriver from the database.
 exports.deleteAll = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -189,22 +189,22 @@ exports.deleteAll = (req, res) => {
       });
       return;
     }
-    Customer.destroy({
+    Deliverdriver.destroy({
         where: {},
         truncate: false
       })
         .then(nums => {
-          res.send({ message: `${nums} Customer were deleted successfully!` });
+          res.send({ message: `${nums} Deliverdriver were deleted successfully!` });
         })
         .catch(err => {
           res.status(500).send({
             message:
-              err.message || "Some error occurred while removing all Customer."
+              err.message || "Some error occurred while removing all Deliverdriver."
           });
         });
 };
 
-// Find all published Customer
+// Find all published Deliverdriver
 exports.findAllPublished = (req, res) => {
       // Read API key from header
       const apiKey = req.headers['api-key'];
@@ -217,14 +217,14 @@ exports.findAllPublished = (req, res) => {
       });
       return;
     }
-    Customer.findAll({ where: { published: true } })
+    Deliverdriver.findAll({ where: { published: true } })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Customer."
+          err.message || "Some error occurred while retrieving Deliverdriver."
       });
     });
 };
