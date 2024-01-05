@@ -6,7 +6,7 @@ module.exports = {
   HOST: "mi3-ss121.a2hosting.com",
   USER: "bdpamked",
   PASSWORD: "U;qibKs[2KC607",
-  DB: "bdpamked_student_DBv1",
+  DB: "bdpamked_doorknobdash",
   dialect: "mysql",
   pool: {
     max: 5,
@@ -15,3 +15,4 @@ module.exports = {
     idle: 10000
   }
 };
+
