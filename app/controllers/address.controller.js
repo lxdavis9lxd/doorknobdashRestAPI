@@ -16,7 +16,7 @@ exports.create = (req, res) => {
     }
   // Validate request
  console.log("log",req.body)
-  if (!req.body.Data[0].Customernumber) {
+  if (!req.body.Data[0].City) {
     res.status(400).send({
       message: "Content can not be empty!"
       
@@ -53,6 +53,7 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
        // Read API key from header
   const apiKey = req.headers['api-key'];
+  console.log("apikey read",apiKey);
   // Compare API key
   const isvalidkey = validatekey.validateApiKey(apiKey)
   console.log("apikey",apiKey);
@@ -64,7 +65,7 @@ exports.findAll = (req, res) => {
       return;
     }
     const title = req.query.title;
-    var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+    var condition = title ? { title: { [Op.like]: `%${title}%` } } :  null;
     console.log("condition: " + condition);
     Address.findAll({ where: condition })
       .then(data => {

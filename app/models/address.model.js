@@ -1,11 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
 const Address = sequelize.define('address', {
-    ID: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true,
-    },
+ 
     UnitNumber: {
         type: Sequelize.INTEGER,
         allowNull: true

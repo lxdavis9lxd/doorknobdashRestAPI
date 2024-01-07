@@ -1,11 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const FoodOrder = sequelize.define('foodorder', {
-        ID: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        autoIncrement: true,
-        },
+       
         CustomerId: {
             type: Sequelize.INTEGER,
             allowNull: false

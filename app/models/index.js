@@ -19,16 +19,16 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.tutorials = require("./address.model.js")(sequelize, Sequelize);
-db.customers = require("./country.model.js")(sequelize, Sequelize);
-db.employees = require("./customer.model.js")(sequelize, Sequelize);
-db.offices = require("./customeraddress.model.js")(sequelize, Sequelize);
-db.orders = require("./foodorder.model.js")(sequelize, Sequelize);
-db.orders = require("./deliverdriver.model.js")(sequelize, Sequelize);
-db.orderdetails = require("./menuitem.model.js")(sequelize, Sequelize);
-db.payments = require("./ordermenuitem.model.js")(sequelize, Sequelize);
-db.productlines = require("./orderstatus.model.js")(sequelize, Sequelize);
-db.products = require("./restaurant.model.js")(sequelize, Sequelize);
-db.users = require("./user.model.js")(sequelize, Sequelize);
+db.address = require("./address.model.js")(sequelize, Sequelize);
+db.country = require("./country.model.js")(sequelize, Sequelize);
+db.customer = require("./customer.model.js")(sequelize, Sequelize);
+db.customeraddress = require("./customeraddress.model.js")(sequelize, Sequelize);
+db.foodorder = require("./foodorder.model.js")(sequelize, Sequelize);
+db.deliverdriver = require("./deliverdriver.model.js")(sequelize, Sequelize);
+db.menuitem = require("./menuitem.model.js")(sequelize, Sequelize);
+db.ordermenuitem = require("./ordermenuitem.model.js")(sequelize, Sequelize);
+db.orderstatus = require("./orderstatus.model.js")(sequelize, Sequelize);
+db.restaurant = require("./restaurant.model.js")(sequelize, Sequelize);
+db.user = require("./user.model.js")(sequelize, Sequelize);
 
 module.exports = db;
