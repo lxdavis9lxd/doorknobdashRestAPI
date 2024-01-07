@@ -3,7 +3,7 @@ const Menuitem = db.menuitem;
 const Op = db.Sequelize.Op;
 const validatekey  = require("./validator.js");
 
-// Create and Save a new Customer
+// Create and Save a new menuitem
 exports.create = (req, res) => {
   const apiKey = req.headers['api-key'];
   const isvalidkey = validatekey.validateApiKey(apiKey)

@@ -1,16 +1,16 @@
 module.exports = (sequelize, Sequelize) => {
 const CustomerAddress = sequelize.define('customeraddress', {
     ID: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
     CustomerId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
     AddressId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: true,
     },
 });

@@ -1,41 +1,41 @@
 module.exports = (sequelize, Sequelize) => {
 const Address = sequelize.define('address', {
     ID: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
     },
     UnitNumber: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: true
     },
     StreetNumber: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: true
     },
     AddressLine1: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true
     },
     AddressLine2: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true
     },
     City: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true
     },
     Region: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true
     },
     PostalCode: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true
     },
     CountryId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: true
     }
 }, {

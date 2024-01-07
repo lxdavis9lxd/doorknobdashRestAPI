@@ -3,7 +3,7 @@ const Address = db.address;
 const Op = db.Sequelize.Op;
 const validatekey  = require("./validator.js");
 
-// Create and Save a new Customer
+// Create and Save a address
 exports.create = (req, res) => {
   const apiKey = req.headers['api-key'];
   const isvalidkey = validatekey.validateApiKey(apiKey)
@@ -55,7 +55,7 @@ exports.findAll = (req, res) => {
   const apiKey = req.headers['api-key'];
   // Compare API key
   const isvalidkey = validatekey.validateApiKey(apiKey)
-
+  console.log("apikey",apiKey);
   if (isvalidkey.status == 401) {  
     console.log("Unauthorized",apiKey);
       res.status(401).send({

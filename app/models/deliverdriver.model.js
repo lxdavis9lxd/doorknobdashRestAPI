@@ -1,17 +1,17 @@
 module.exports = (sequelize, Sequelize) => {
 const DeliveryDriver = sequelize.define('deliverydriver', {
     ID: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
     },
     FirstName: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false,
     },
     LastName: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: false,
     }
     

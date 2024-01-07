@@ -35,17 +35,17 @@ app.get("/store", (req, res) => {
 
 
 
-require("./app/routes/turorial.routes")(app);
+
+require("./app/routes/address.routes")(app);
+require("./app/routes/country.routes")(app);
 require("./app/routes/customer.routes")(app);
-require("./app/routes/employees.routes")(app);
-require("./app/routes/offices.routes")(app);
-require("./app/routes/orders.routes")(app);
-require("./app/routes/orderdetails.routes")(app);
-require("./app/routes/payments.routes")(app);
-require("./app/routes/productlines.routes")(app);
-require("./app/routes/products.routes")(app);
-require("./app/routes/SPKusers.routes")(app);
-require("./app/routes/users.routes")(app);
+require("./app/routes/foodorder.routes")(app);
+require("./app/routes/deliverdriver.routes")(app);
+require("./app/routes/menuitem.routes")(app);
+require("./app/routes/ordermenuitem.routes")(app);
+require("./app/routes/orderstaus.routes")(app);
+require("./app/routes/restaurant.routes")(app);
+require("./app/routes/user.routes")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
