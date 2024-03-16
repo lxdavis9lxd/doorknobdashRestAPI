@@ -24,5 +24,5 @@ module.exports = app => {
     // Delete all deliverdriver
     router.delete("/", deliverdriver.deleteAll);
   
-    app.use('/s/api/v1/deliverdriver', router);
+    app.use('/s/api/v1/deliverydriver', router);
   };

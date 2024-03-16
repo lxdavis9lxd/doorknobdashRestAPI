@@ -1,5 +1,5 @@
 const db = require("../models");
-const Customeraddress = db.address;
+const Customeraddress = db.customeraddress;
 const Op = db.Sequelize.Op;
 const validatekey  = require("./validator.js");
 
@@ -16,7 +16,7 @@ exports.create = (req, res) => {
     }
   // Validate request
  console.log("log",req.body)
-  if (!req.body.Data[0].Customernumber) {
+  if (!req.body.Data[0].AddressId) {
     res.status(400).send({
       message: "Content can not be empty!"
       

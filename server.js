@@ -39,6 +39,7 @@ app.get("/store", (req, res) => {
 require("./app/routes/address.routes")(app);
 require("./app/routes/country.routes")(app);
 require("./app/routes/customer.routes")(app);
+require("./app/routes/customeraddress.routes")(app);
 require("./app/routes/foodorder.routes")(app);
 require("./app/routes/deliverdriver.routes")(app);
 require("./app/routes/menuitem.routes")(app);

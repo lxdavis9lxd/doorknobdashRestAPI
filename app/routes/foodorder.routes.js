@@ -24,5 +24,5 @@ module.exports = app => {
     // Delete all foodorder
     router.delete("/", foodorder.deleteAll);
   
-    app.use('/s/api/v1/foodorder', router);
+    app.use('/s/api/v1/Foodorder', router);
   };

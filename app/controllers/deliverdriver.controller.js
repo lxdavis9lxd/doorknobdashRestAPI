@@ -16,7 +16,7 @@ exports.create = (req, res) => {
     }
   // Validate request
  console.log("log",req.body)
-  if (!req.body.Data[0].Customernumber) {
+  if (!req.body.Data[0].LastName) {
     res.status(400).send({
       message: "Content can not be empty!"
       
